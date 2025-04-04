@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Brainstormer App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h2, h3, h4 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 15px 0 5px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .section {
+      margin-top: 40px;
+      padding-top: 10px;
+      border-top: 2px solid #ddd;
+    }
+    .ideas, .assessment {
+      background: #e9f7ef;
+      padding: 20px;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+    .idea-item {
+      margin-bottom: 10px;
+    }
+    .summary-text {
+      font-size: 1.05em;
+      line-height: 1.6em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Content Brainstormer</h2>
+
+    <div class="section">
+      <h3>Step 1: Reflect on Your Career</h3>
+      <label for="careerLength">How many years have you worked professionally?</label>
+      <input type="number" id="careerLength" placeholder="e.g. 25">
+
+      <label for="skills">What are your top 3 professional skills or strengths?</label>
+      <textarea id="skills" placeholder="e.g. Project management, Communication, Design Thinking"></textarea>
+
+      <label for="milestones">What career accomplishments are you most proud of?</label>
+      <textarea id="milestones" placeholder="e.g. Led a major product launch, Mentored 10 junior staff"></textarea>
+
+      <label for="passions">What topics are you most passionate about sharing or teaching?</label>
+      <textarea id="passions" placeholder="e.g. Creative leadership, Healthy aging, Financial freedom"></textarea>
+
+      <button onclick="summarizeCareer()">Summarize My Expertise</button>
+      <div class="assessment" id="careerSummary"></div>
+    </div>
+
+    <div class="section">
+      <h3>Step 2: Brainstorm Content Ideas</h3>
+      <label for="topic">Your Topic or Expertise Area:</label>
+      <input type="text" id="topic" placeholder="e.g. Gardening, Midlife Coaching">
+
+      <label for="format">Select Content Format:</label>
+      <select id="format">
+        <option value="YouTube video">YouTube video</option>
+        <option value="Blog post">Blog post</option>
+        <option value="Book idea">Book idea</option>
+        <option value="Course module">Course module</option>
+      </select>
+
+      <button onclick="generateIdeas()">Generate Content Ideas</button>
+      <div class="ideas" id="results"></div>
+    </div>
+  </div>
+
+  <script>
+    function generateIdeas() {
+      const topic = document.getElementById('topic').value.trim();
+      const format = document.getElementById('format').value;
+      const resultsDiv = document.getElementById('results');
+
+      if (!topic) {
+        alert("Please enter a topic or area of expertise.");
+        return;
+      }
+
+      const ideas = [
+        `"${topic}" for beginners: A ${format} that breaks down the basics`,
+        `Top 5 mistakes people make in ${topic} – a must-watch ${format}`,
+        `A personal story related to ${topic} that teaches a powerful lesson`,
+        `How ${topic} changed my life – inspirational ${format}`,
+        `Step-by-step guide to getting started with ${topic}`
+      ];
+
+      resultsDiv.innerHTML = '<h3>Here are your ideas:</h3>' + ideas.map(i => `<div class="idea-item">- ${i}</div>`).join('');
+    }
+
+    function summarizeCareer() {
+      const length = document.getElementById('careerLength').value.trim();
+      const skills = document.getElementById('skills').value.trim();
+      const milestones = document.getElementById('milestones').value.trim();
+      const passions = document.getElementById('passions').value.trim();
+      const summaryDiv = document.getElementById('careerSummary');
+
+      if (!length || !skills || !milestones || !passions) {
+        alert("Please complete all parts of the questionnaire.");
+        return;
+      }
+
+      const summary = `
+        <div class="summary-text">
+          You have <strong>${length}</strong> years of professional experience. Your key strengths include <strong>${skills}</strong>. Over the course of your career, you’ve made meaningful contributions such as <strong>${milestones}</strong>.
+          <br><br>
+          You feel passionate about topics like <strong>${passions}</strong>, and you have a unique perspective to share that could make a real impact.
+          <br><br>
+          <em>Now is the perfect time to begin. Start with a simple blog post or a short video. Let your voice be heard — someone out there needs your story, your wisdom, and your guidance.</em>
+        </div>
+      `;
+
+      summaryDiv.innerHTML = `<h4>Your Career Summary:</h4>${summary}`;
+    }
+  </script>
+</body>
+</html>
