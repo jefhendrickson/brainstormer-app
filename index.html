@@ -83,7 +83,11 @@
       <label for="passions">What topics are you most passionate about sharing or teaching?</label>
       <textarea id="passions" placeholder="e.g. Creative leadership, Healthy aging, Financial freedom"></textarea>
 
+      <label for="hobbies">What hobbies or personal interests bring you joy?</label>
+      <textarea id="hobbies" placeholder="e.g. Hiking, Photography, Gardening, Playing music"></textarea>
+
       <button onclick="summarizeCareer()">Summarize My Expertise</button>
+      <button onclick="downloadSummary()">Download Summary</button>
       <div class="assessment" id="careerSummary"></div>
     </div>
 
@@ -106,9 +110,12 @@
   </div>
 
   <script>
+    let lastSummary = "";
+
     function generateIdeas() {
       const topic = document.getElementById('topic').value.trim();
       const format = document.getElementById('format').value;
+      const hobbies = document.getElementById('hobbies').value.trim();
       const resultsDiv = document.getElementById('results');
 
       if (!topic) {
@@ -117,10 +124,10 @@
       }
 
       const ideas = [
-        `"${topic}" for beginners: A ${format} that breaks down the basics`,
+        `"${topic}" for beginners: A ${format} that breaks down the basics` + (hobbies ? ` with examples from your hobbies like ${hobbies}` : ''),
         `Top 5 mistakes people make in ${topic} – a must-watch ${format}`,
         `A personal story related to ${topic} that teaches a powerful lesson`,
-        `How ${topic} changed my life – inspirational ${format}`,
+        `How ${topic} changed my life – inspirational ${format}` + (hobbies ? ` that ties in with your love for ${hobbies}` : ''),
         `Step-by-step guide to getting started with ${topic}`
       ];
 
@@ -132,24 +139,42 @@
       const skills = document.getElementById('skills').value.trim();
       const milestones = document.getElementById('milestones').value.trim();
       const passions = document.getElementById('passions').value.trim();
+      const hobbies = document.getElementById('hobbies').value.trim();
       const summaryDiv = document.getElementById('careerSummary');
 
-      if (!length || !skills || !milestones || !passions) {
+      if (!length || !skills || !milestones || !passions || !hobbies) {
         alert("Please complete all parts of the questionnaire.");
         return;
       }
 
-      const summary = `
+      lastSummary = `You have ${length} years of professional experience. Your key strengths include ${skills}. Over the course of your career, you’ve made meaningful contributions such as ${milestones}.
+
+You feel passionate about topics like ${passions}, and your personal interests — including ${hobbies} — bring a rich, human dimension to everything you create.
+
+Now is the perfect time to begin. Start with a simple blog post or a short video. Let your voice be heard — someone out there needs your story, your wisdom, and your guidance.`;
+
+      const summaryHTML = `
         <div class="summary-text">
-          You have <strong>${length}</strong> years of professional experience. Your key strengths include <strong>${skills}</strong>. Over the course of your career, you’ve made meaningful contributions such as <strong>${milestones}</strong>.
-          <br><br>
-          You feel passionate about topics like <strong>${passions}</strong>, and you have a unique perspective to share that could make a real impact.
-          <br><br>
-          <em>Now is the perfect time to begin. Start with a simple blog post or a short video. Let your voice be heard — someone out there needs your story, your wisdom, and your guidance.</em>
+          ${lastSummary.replace(/\n/g, '<br><br>')}
         </div>
       `;
 
-      summaryDiv.innerHTML = `<h4>Your Career Summary:</h4>${summary}`;
+      summaryDiv.innerHTML = `<h4>Your Career Summary:</h4>${summaryHTML}`;
+    }
+
+    function downloadSummary() {
+      if (!lastSummary) {
+        alert("Please generate your summary first.");
+        return;
+      }
+
+      const blob = new Blob([lastSummary], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "career_summary.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   </script>
 </body>
